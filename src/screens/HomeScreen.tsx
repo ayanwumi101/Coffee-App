@@ -1,6 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, StatusBar, ScrollView } from 'react-native'
 import React, {useState} from 'react'
 import { useStore } from '../store/store'
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
+import { COLORS, FONTFAMILY, FONTSIZE, SPACING } from '../theme/theme'
+import HeaderBar from '../components/HeaderBar'
+
+
 
 const getCategoriesFromData = (data: any) => {
   let temp: any = {};
@@ -20,7 +25,7 @@ const getCoffeeList = (category: string, data: any) => {
   if(category === 'All'){
     return data;
   }else{
-    let coffeeList = data.filter((item: any) => item.name === category);git
+    let coffeeList = data.filter((item: any) => item.name === category);
   }
 }
 
@@ -33,14 +38,35 @@ const HomeScreen = () => {
     index: 0,
     category: categories[0],
   })
-  const [sortedCoffee, setSortedCoffee] = useState(undefined)
+  const [sortedCoffee, setSortedCoffee] = useState(getCoffeeList(categoryIndex.category, CoffeeList))
+  const tabBarHeight = useBottomTabBarHeight();
   return (
-    <View>
-      <Text>HomeScreen</Text>
+    <View style={styles.ScreenContainer}>
+      <StatusBar backgroundColor={COLORS.primaryBlackHex} />
+      <ScrollView 
+        showsVerticalScrollIndicator={false} contentContainerStyle={styles.ScrollViewFlex}
+      >
+        <HeaderBar />
+        <Text style={styles.screenTitle}>Find the best {`\n`}coffee for you</Text>
+      </ScrollView>
     </View>
   )
 }
 
 export default HomeScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  ScreenContainer: {
+    flex: 1,
+    backgroundColor: COLORS.primaryBlackHex,
+  },
+  ScrollViewFlex: {
+    flexGrow: 1,  
+  },
+  screenTitle: {
+    fontSize: FONTSIZE.size_28,
+    fontFamily: FONTFAMILY.poppins_semibold,
+    color: COLORS.primaryWhiteHex,
+    paddingLeft: SPACING.space_30
+  }
+})
